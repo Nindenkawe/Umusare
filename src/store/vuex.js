@@ -1,31 +1,36 @@
 import Vuex from 'vuex'
-/* import {getApi} from '../axios-api' */
-import axios from 'axios'
-
+import { getAPI } from '../axios-api'
 
 export default new Vuex.Store({
-  state:{
+  state: {
     accessToken: null,
     refreshToken: null,
-    Userinfo: ''
+    userInfo: ''
   },
-  mutations:{
-    updatestorage (state,{access,refresh}){
+  mutations: {
+    updateStorage(state, { access, refresh }) {
       state.accessToken = access
       state.refreshToken = refresh
-
     },
   },
-  actions:{
-    userLogin(context, usercredentials){
-      return new Promise((resolve,reject)=>{
-        axios.post('/api/token',{
-          username: usercredentials.username,
-          password: usercredentials.password
+  actions: {
+    userLogin({ commit }, userCredentials) {
+      return new Promise((resolve, reject) => {
+        // Make a POST request to the Django server to authenticate the user
+        getAPI.post('/api/token/', {
+          username: userCredentials.username,
+          password: userCredentials.password
         })
         .then(response => {
-          context.commit('updateStorage',{access:response.data.access, refresh: response.data.refresh})
+          // Update the store with the access and refresh tokens received
+          commit('updateStorage', {
+            access: response.data.access,
+            refresh: response.data.refresh
+          })
           resolve()
+        })
+        .catch(error => {
+          reject(error)
         })
       })
     }

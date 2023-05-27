@@ -61,7 +61,7 @@ export default {
   },
   methods: {
         submit(){
-            getAPI.post('/Book_Driver', this.form)
+            getAPI.post('Ihute_on_off_street/book_Driver', this.form)
                 .then(function( response ){
                     console.log(response)
                 }.bind(this));
